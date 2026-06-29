@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import authRoutes from "./routes/authRoutes.js";
+import walletRoutes from "./routes/walletRoutes.js";
 
 const app = express();
 
@@ -13,5 +14,8 @@ app.get("/", (req, res) => {
 
 // Authentication Routes
 app.use("/api/auth", authRoutes);
+
+// Wallet Routes
+app.use("/api/wallet", walletRoutes);
 
 export default app;

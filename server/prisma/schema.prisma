@@ -14,4 +14,18 @@ model User {
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  // One user has one wallet
+  wallet    Wallet?
+}
+
+model Wallet {
+  id        Int      @id @default(autoincrement())
+  balance   Float    @default(0)
+
+  userId    Int      @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

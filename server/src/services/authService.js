@@ -21,13 +21,22 @@ export const registerService = async (userData) => {
   const hashedPassword = await bcrypt.hash(password, 10);
 
   // Save user
-  const user = await prisma.user.create({
-    data: {
-      username,
-      email,
-      password: hashedPassword,
+ const user = await prisma.user.create({
+  data: {
+    username,
+    email,
+    password: hashedPassword,
+
+    wallet: {
+      create: {
+        balance: 0,
+      },
     },
-  });
+  },
+  include: {
+    wallet: true,
+  },
+});
 
   return {
     id: user.id,
