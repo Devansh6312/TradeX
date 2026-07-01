@@ -69,31 +69,42 @@ export const buyStockService = async (userId, symbol, quantity) => {
     });
 
     if (existingPortfolio) {
-      await tx.portfolio.update({
-        where: {
-          id: existingPortfolio.id,
-        },
-        data: {
-          quantity: {
-            increment: quantity,
-          },
-        },
-      });
-    } else {
-      await tx.portfolio.create({
-        data: {
-          userId,
-          stockId: stock.id,
-          quantity,
-        },
-      });
-    }
+  await tx.portfolio.update({
+    where: {
+      id: existingPortfolio.id,
+    },
+    data: {
+      quantity: {
+        increment: quantity,
+      },
+    },
+  });
+} else {
+  await tx.portfolio.create({
+    data: {
+      userId,
+      stockId: stock.id,
+      quantity,
+    },
+  });
+}
 
-    return {
-      message: "Stock purchased successfully",
-      stock,
-      totalPrice,
-    };
+// Create Transaction
+await tx.transaction.create({
+  data: {
+    type: "BUY",
+    quantity,
+    amount: totalPrice,
+    userId,
+    stockId: stock.id,
+  },
+});
+
+return {
+  message: "Stock purchased successfully",
+  stock,
+  totalPrice,
+};
   });
 };
 
@@ -148,29 +159,40 @@ export const sellStockService = async (userId, symbol, quantity) => {
     });
 
     // Remove portfolio if all shares sold
-    if (portfolio.quantity === quantity) {
-      await tx.portfolio.delete({
-        where: {
-          id: portfolio.id,
-        },
-      });
-    } else {
-      await tx.portfolio.update({
-        where: {
-          id: portfolio.id,
-        },
-        data: {
-          quantity: {
-            decrement: quantity,
-          },
-        },
-      });
-    }
+   if (portfolio.quantity === quantity) {
+  await tx.portfolio.delete({
+    where: {
+      id: portfolio.id,
+    },
+  });
+} else {
+  await tx.portfolio.update({
+    where: {
+      id: portfolio.id,
+    },
+    data: {
+      quantity: {
+        decrement: quantity,
+      },
+    },
+  });
+}
 
-    return {
-      message: "Stock sold successfully",
-      stock,
-      totalAmount,
-    };
+// Create Transaction
+await tx.transaction.create({
+  data: {
+    type: "SELL",
+    quantity,
+    amount: totalAmount,
+    userId,
+    stockId: stock.id,
+  },
+});
+
+return {
+  message: "Stock sold successfully",
+  stock,
+  totalAmount,
+};
   });
 };
