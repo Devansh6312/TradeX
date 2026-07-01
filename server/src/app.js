@@ -3,6 +3,7 @@ import cors from "cors";
 import authRoutes from "./routes/authRoutes.js";
 import walletRoutes from "./routes/walletRoutes.js";
 import stockRoutes from "./routes/stockRoutes.js";
+import portfolioRoutes from "./routes/portfolioRoutes.js";
 
 const app = express();
 
@@ -21,5 +22,8 @@ app.use("/api/wallet", walletRoutes);
 
 // Stock Routes
 app.use("/api/stocks", stockRoutes);
+
+// Portfolio Routes
+app.use("/api/portfolio", portfolioRoutes);
 
 export default app;

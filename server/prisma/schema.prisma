@@ -19,6 +19,7 @@ model User {
   // Relations
   wallet    Wallet?
   portfolio Portfolio[]
+  transactions Transaction[]
 }
 
 model Wallet {
@@ -40,6 +41,7 @@ model Stock {
 
   // Relation
   portfolio Portfolio[]
+  transactions Transaction[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -59,4 +61,20 @@ model Portfolio {
   createdAt DateTime @default(now())
 
   @@unique([userId, stockId])
+}
+
+model Transaction {
+  id        Int      @id @default(autoincrement())
+
+  type      String
+  quantity  Int
+  amount    Float
+
+  userId    Int
+  stockId   Int
+
+  user       User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stock      Stock   @relation(fields: [stockId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
 }
