@@ -5,6 +5,7 @@ import walletRoutes from "./routes/walletRoutes.js";
 import stockRoutes from "./routes/stockRoutes.js";
 import portfolioRoutes from "./routes/portfolioRoutes.js";
 import transactionRoutes from "./routes/transactionRoutes.js";
+import dashboardRoutes from "./routes/dashboardRoutes.js";
 
 const app = express();
 
@@ -28,6 +29,8 @@ app.use("/api/stocks", stockRoutes);
 app.use("/api/portfolio", portfolioRoutes);
 
 app.use("/api/transactions", transactionRoutes);
+
+app.use("/api/dashboard", dashboardRoutes);
 
 
 export default app;
